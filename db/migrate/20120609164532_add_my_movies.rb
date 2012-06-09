@@ -12,6 +12,6 @@ class AddMyMovies < ActiveRecord::Migration
   def down
     MY_MOVIES.each do |movie|
       Movie.find_by_title_and_rating(movie[:title], movie[:rating]).destroy
-    end$
+    end
   end
 end
