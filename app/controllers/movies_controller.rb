@@ -7,9 +7,28 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if !params.has_key?(:ratings) && !params.has_key?(:sort) && !params.has_key?(:commit) && (session.has_key?(:ratings) || session.has_key?(:sort)) then
+      args = Hash.new
+      if session[:ratings] then
+        args[:ratings] = session[:ratings]
+      end
+      if session[:sort] then
+        args[:sort] = session[:sort]
+      end
+      redirect_to movies_path(args)
+    end
     if params[:ratings] then
       @ratings = params[:ratings]
       @select_ratings = params[:ratings].keys
+      session[:ratings] = @ratings
+    else
+      session.delete(:ratings);
+      session.delete(:ratinges);
+    end
+    if params[:sort] then
+      session[:sort] = params[:sort]
+    else
+      session.delete(:sort);
     end
     if params[:sort] == 'title' then
       if @select_ratings != nil then
